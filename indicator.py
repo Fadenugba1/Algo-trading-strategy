@@ -3,7 +3,7 @@ import pandas as pd
 import polars as pl
 import plotly as plt
 
-
+#calculates the relative strength index from the input series
 def Relative_strength_index(series,**kwargs):
   close_arr = pd.Series(series,dtype=np.float64)
   delta = close_arr.diff()
@@ -20,7 +20,7 @@ def Relative_strength_index(series,**kwargs):
   return RS_index
 
 
-
+#calculates the bollinger bands from the input series
 def bollinger(series,**kwargs):
   period = kwargs["period"]
   bollinger_range = kwargs["bollinger_range"]
@@ -31,7 +31,7 @@ def bollinger(series,**kwargs):
   lower_band = moving_avg - (bollinger_range*std).fillna(0)
   return upper_band.to_numpy(),lower_band.to_numpy(),moving_avg.to_numpy()
 
-
+#calculates the average true range from the input series
 def ATR_backtest(close,**kwargs):
   Highs = np.array(kwargs["High"])
   Lows = np.array(kwargs["Low"])
@@ -50,6 +50,7 @@ def ATR_backtest(close,**kwargs):
   #ATR = np.insert(ATR.to_numpy(),0,0.0)
   return ATR
 
+#identifies rejection candles from the input series
 def rejection_candles(close,**kwargs):
   signals = []
   Close = close
