@@ -187,7 +187,7 @@ class Signal:
             total_arr.append(total)
             
         returns = np.diff(total_arr) / total_arr[:-1]  
-        Sharpe_ratio = (np.mean(returns) / np.std(returns))
+        Sharpe_ratio = ((np.mean(returns)-0.02) / np.std(returns))
         stats_dict = {"Sharpe Ratio":Sharpe_ratio,
                       "Daily total": total_arr,
                       "rsi signal":rsi_signal,
