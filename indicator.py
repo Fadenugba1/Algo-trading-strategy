@@ -69,7 +69,47 @@ def rejection_candles(close,**kwargs):
     else:
       signals.append(0)
   return signals
+
+#calculates the average directional index from the input series
+def ADX(dataframe,high_name,low_name):
+  p_di = [0]
+  n_di = [0]
+  highs = dataframe[high_name].to_numpy()
+  lows= dataframe[low_name].to_numpy()
+  for i in range(1,len(lows)):
+    p_di.append(highs[i]-highs[i-1])
+    n_di.append(lows[i]-lows[i-1])
+  n_di = np.array(n_di)
+  p_di = np.array(p_di)
+  Average_directional_index = [(p_di/n_di)/(p_di + n_di)*100]
+  return n_di,p_di,Average_directional_index
+
+#calculates the stochastic oscillator from the input series
+def stochastic_oscillator(K,d,dataframe,closename,Lowname,highname):
+  Low = dataframe[Lowname].rolling(K).min()
+  High = dataframe[highname].rolling(K).max()
+  perc_K = ((dataframe[closename] - Low)/(High - Low))*100
+  D = perc_K.rolling(d).mean()
+  return D
       
+      
+#On balance volume
+def OBV(dataframe,Closename,Volname):
+  Volume = dataframe[Volname]
+  Close = dataframe[Closename]
+  On_balance_volume = Volume.iloc[0]
+  OBV_arr = [On_balance_volume]
+  for i in range(1,len(Volume)):
+    if Close.iloc[i]>Close.iloc[i-1]:
+      On_balance_volume = On_balance_volume + Volume.iloc[i]
+      OBV_arr.append(On_balance_volume)
+    elif Close.iloc[i] == Close.iloc[i-1]:
+      OBV_arr.append(On_balance_volume)
+    else:
+      On_balance_volume = On_balance_volume - Volume.iloc[i]
+      OBV_arr.append(On_balance_volume)
+  return On_balance_volume, OBV_arr
+
   
 
 
